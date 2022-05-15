@@ -76,31 +76,6 @@ print("训练集准确率：", accuracy_score(train_Y,tra_label) )
 print("测试集准确率：", accuracy_score(test_Y,tes_label) )
 print("验证集准确率：", accuracy_score(valid_Y,val_label) )
 
-
-
-# #利用最终优化的结果计算分类正确率等信息
-# clf = svm.SVC(C=10, gamma=0.01,kernel='rbf')
-#
-# clf.fit(train_X,train_Y)
-# y_predict1 = clf.predict(train_X)
-#
-# # 训练分类正确率计算
-# acc=np.sum(y_predict1==train_Y)/len(train_Y)
-# print('训练集分类精度为：',acc*100,'%')
-#
-#
-# y_predict2 = clf.predict(valid_X)
-#
-# # 验证分类正确率计算
-# acc=np.sum(y_predict2==valid_Y)/len(valid_Y)
-# print('验证集分类精度为：',acc*100,'%')
-#
-#
-# y_predict = clf.predict(test_X)
-# acc=np.sum(y_predict==test_Y)/len(test_Y)
-# print('测试集分类精度为：',acc*100,'%')
-
-
 print('混淆矩阵')
 cm=confusion_matrix(test_Y,tes_label)
 print(cm)
