@@ -38,7 +38,6 @@ label=test_Y
 
 #原始数据可视化
 method=TSNE(n_components=3)
-method=PCA(n_components=3)
 feature0=method.fit_transform(input_data) 
 colors = ['black', 'blue', 'purple', 'yellow', 'cadetblue', 'red', 'lime', 'cyan', 'orange', 'gray']
 plt.figure()
