@@ -1,8 +1,8 @@
 #coding:utf-8
-from scipy.io import loadmat,savemat  # 实现Python对mat数据的读写
+from scipy.io import loadmat,savemat  
 import numpy as np
 import os
-from sklearn import preprocessing  # 0-1编码
+from sklearn import preprocessing  
 from sklearn.preprocessing import MinMaxScaler
 
 def capture(original_path):
@@ -11,7 +11,7 @@ def capture(original_path):
     :return: 数据字典
     """
     # 获得该文件夹下所有.mat文件名
-    filenames = os.listdir(d_path) # 返回d_path中包含的文件或文件夹的名字的列表
+    filenames = os.listdir(d_path) 
     files = {}
     n=0
     for i in filenames:
@@ -19,29 +19,29 @@ def capture(original_path):
         file_path = os.path.join(d_path, i) # 把目录和文件名合成一个路径
         print(file_path,'为第',n,'类')
         n += 1
-        file = loadmat(file_path) # 读取路径为file_path的.mat文件，返回值为字典类型dict
-        file_keys = file.keys() # 返回一个字典的所有键
+        file = loadmat(file_path) 
+        file_keys = file.keys()
         for key in file_keys:
             if 'DE' in key:
-                files[i] = file[key].ravel() # ravel() 函数返回连续的扁平数组
+                files[i] = file[key].ravel() # ravel() 
     return files
 
 def slice_enc(data,number=1000,length=1024):
     """
     每个样本的长度为length 每类各number个样本
     """
-    keys = data.keys() # 返回所有键
+    keys = data.keys() 
     labels,samples=[],[]
     n=0
     for i in keys:
         slice_data = data[i]
         for j in range(number):
-            random_start = np.random.randint(low=0, high=(len(slice_data) - length)) # 返回一个随机整型数 既[low，high)
+            random_start = np.random.randint(low=0, high=(len(slice_data) - length)) 
             sample = slice_data[random_start:random_start + length]
-            labels.append(n) # 在label后添加新的对象
-            samples.append(sample) # ......
+            labels.append(n)
+            samples.append(sample) 
         n += 1
-    samples,lables=np.array(samples),np.array(labels) # 创建数组
+    samples,lables=np.array(samples),np.array(labels)
     return samples,lables
 
 # one-hot编码
