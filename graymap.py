@@ -2,7 +2,7 @@ from PIL import Image
 import scipy.io as scio
 from pylab import *
 import os
-path = r'E:\fault-diagnosis\代码\(2d-cnn+1d-cnn)+SVM\0HP'
+path = r'E:\fault-diagnosis\0HP'
 filenames = os.listdir(path)   #提取十个类型的mat文件文件名
 for item in filenames:
     file_path = os.path.join(path, item)  #os.path.join是把文件名和文件的路径拼接到一起
