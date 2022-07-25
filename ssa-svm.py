@@ -10,33 +10,30 @@ import SSA as SSA
 from sklearn.metrics import accuracy_score
 
 def plot_confusion_matrix(cm, labels_name, title):
-    cm = cm.astype('float') / cm.sum(axis=1)# 归一化
+    cm = cm.astype('float') / cm.sum(axis=1)
     plt.figure()
-    plt.imshow(cm, interpolation='nearest')    # 在特定的窗口上显示图像
-    plt.title(title)    # 图像标题
+    plt.imshow(cm, interpolation='nearest')  
+    plt.title(title) 
     plt.colorbar()
     num_local = np.array(range(len(labels_name)))    
-    plt.xticks(num_local, labels_name)    # 将标签印在x轴坐标上
-    plt.yticks(num_local, labels_name)    # 将标签印在y轴坐标上
+    plt.xticks(num_local, labels_name)   
+    plt.yticks(num_local, labels_name)   
     plt.ylabel('True label')    
     plt.xlabel('Predicted label')
     plt.savefig('cnn_image/confusion_matrinx_svm.jpg')
     plt.show()
 
-#定义适应函数，以测试集和训练集的错误率和为适应度值
 def fun(X):
-    # 3.训练svm分类器
+    # 训练svm分类器
     clf = svm.SVC(C=X[0], kernel='rbf', gamma=X[1])  # ovr:一对多策略
-    clf.fit(train_X, train_Y)  # ravel函数在降维时默认是行序优先
-    # 4.计算svc分类器的准确率
-    # tra_label=classifier.predict(train_wine) #训练集的预测标签
-    tes_label = clf.predict(test_X)  # 测试集的预测标签
-    train_labelout = clf.predict(train_X)  # 测试集的预测标签
-    val_label = clf.predict(valid_X)  # 验证集的预测标签
+    clf.fit(train_X, train_Y) 
+    # 计算svc分类器的准确率
+    tes_label = clf.predict(test_X) 
+    train_labelout = clf.predict(train_X)  
+    val_label = clf.predict(valid_X)  
     output = 3 - accuracy_score(test_Y, tes_label) - accuracy_score(train_Y,train_labelout) - accuracy_score(valid_Y,val_label)  # 计算错误率，如果错误率越小，结果越优
     return output
 
-# In[] 执行svm
 # 加载数据
 mode='2d' # 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
 dataFile = 'result/'+mode+'data_feature.mat'
@@ -64,14 +61,12 @@ fobj = fun
 GbestScore,GbestPositon,Curve = SSA.SSA(pop,dim,lb,ub,MaxIter,fobj)
 print('最优适应度值：',GbestScore)
 print('c,g最优解：',GbestPositon)
-#利用最终优化的结果计算分类正确率等信息
-#训练svm分类器
+
 clf=svm.SVC(C=GbestPositon[0,0],kernel='rbf',gamma=GbestPositon[0,1]) # ovr:一对多策略
 clf.fit(train_X,train_Y)
-#4.计算svc分类器的准确率
-tra_label=clf.predict(train_X) #训练集的预测标签
-tes_label=clf.predict(test_X) #测试集的预测标签
-val_label=clf.predict(valid_X)#验证集的预测标签
+tra_label=clf.predict(train_X) 
+tes_label=clf.predict(test_X) 
+val_label=clf.predict(valid_X)
 print("训练集准确率：", accuracy_score(train_Y,tra_label) )
 print("测试集准确率：", accuracy_score(test_Y,tes_label) )
 print("验证集准确率：", accuracy_score(valid_Y,val_label) )
@@ -80,8 +75,6 @@ print('混淆矩阵')
 cm=confusion_matrix(test_Y,tes_label)
 print(cm)
 for i in range(10):
-    # 计算每一类的精确率,召回率,F1
-    " [i:j:s]也就是，两个冒号分割了三个数i,j,s,i是起始位置,j是终止位置（最终序列里边不包含终止位置）,s就是step，步长. (-1为倒序，step=1)"
     precise=cm[i,i]/sum(cm[:,i])
     recall=cm[i,i]/sum(cm[i,:])
     f1=2*precise*recall/(precise+recall)
