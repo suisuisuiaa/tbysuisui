@@ -27,13 +27,15 @@ test_X=ss.transform(test_X)
 
 x = tf.placeholder(tf.float32, [None, 1024])
 y = tf.placeholder(tf.float32, [None,10])
-dropout_placeholdr = tf.placeholder(tf.float32)#训练的时候用dropout(0-1之间的数) 测试的时候不用dropout(为1)
+#训练的时候用dropout(0-1之间的数) 测试的时候不用dropout(为1)
+dropout_placeholdr = tf.placeholder(tf.float32)
 # In[2] 定义网络相关参数
 # 定义参数
 learning_rate = 0.001#初始学习率
 num_epochs=100#迭代次数
 batch_size = 64#batch_size
-mode='2d' # 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
+# 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
+mode='2d' 
 if mode=='1d':
     _,_,feature,pred= CNN_1D(x,dropout_placeholdr)
 elif mode=='2d':
@@ -47,9 +49,10 @@ cost = tf.reduce_mean(cross_entropy)
 # 分类准确率计算函数
 correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1)) # tf.argmax()
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32)) # tf.cast()
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon = 1e-10).minimize(cost) # 创建Adam优化器,最小化cost
+# 创建Adam优化器,最小化cost
+optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon = 1e-10).minimize(cost) 
 
-saver = tf.train.Saver() # 将我们训练好的模型的参数保存下来，以便下一次继续用于训练或测试
+saver = tf.train.Saver()
 # In[3] 训练与测试
 train = []
 test = []
@@ -57,7 +60,8 @@ valid = []
 trainacc=[]
 testacc = []
 validacc=[]
-select=0 #为0则重新训练模型 1则加载模型直接进行softmax分类 3则调用加载的模型进行特征提取 以便于file3的svm分类
+#为0则重新训练模型 1则加载模型直接进行softmax分类 3则调用加载的模型进行特征提取 以便于file3的svm分类
+select=0 
 
 with tf.Session() as sess:
     init = tf.global_variables_initializer()
