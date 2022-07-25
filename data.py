@@ -16,7 +16,7 @@ def capture(original_path):
     n=0
     for i in filenames:
         # 文件路径
-        file_path = os.path.join(d_path, i) # 把目录和文件名合成一个路径
+        file_path = os.path.join(d_path, i) 
         print(file_path,'为第',n,'类')
         n += 1
         file = loadmat(file_path) 
