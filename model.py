@@ -9,14 +9,13 @@ def cnn_1d(input_tensor):
     # 第一层卷积层
     with tf.variable_scope('layer01-conv1'):
         conv1_weights = tf.get_variable(
-            "weight", [1, 12, 1, 8], #  shape是四维矩阵，前两个是卷积核尺寸（长宽），第三个是当前层的深度，第四个是过滤器的深度
-            initializer=tf.truncated_normal_initializer(stddev=0.1))  # 生成截断正态分布的随机数
-        conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))  # 偏置项初始化 偏置项的维度是下一层的深度，即过滤器的深度
+            "weight", [1, 12, 1, 8], 
+            initializer=tf.truncated_normal_initializer(stddev=0.1))  
+        conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))  
         conv1 = tf.nn.conv2d(input_tensor, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
         #  conv2d(input, filter, strides, padding, use_cudnn_on_gpu=True, data_format="NHWC", dilations=[1, 1, 1, 1], name=None)
         # tf.nn.conv2d实现卷积前向传播
         #  padding:填充方式，VALID不添加，SAME为全0填充
-        # input:当前层的节点矩阵——四维矩阵（batch_size,三维节点矩阵）；strides：不同维度上的步长
         relu1 = tf.nn.relu(tf.nn.bias_add(conv1, conv1_biases))  #将输入小于0的值赋值为0，输入大于0的值不变
     # 第一层最大池化层
     with tf.name_scope("layer02-pool1"):
@@ -33,8 +32,6 @@ def cnn_1d(input_tensor):
     with tf.name_scope("layer04-pool2"):
         pool2 = tf.nn.max_pool(relu2, ksize=[1, 1, 2, 1], strides=[1, 1, 2, 1], padding='SAME')
         # 全连接神经网络的输入是向量，而第二层池化层的输出是矩阵，将矩阵中的节点拉直转化为向量。其中通过get_shape函数可以得到矩阵的维度，返回的是元组
-        # as_list()转化为列表
-        # 只有张量才可以使用get_shape这种方法，tf.shape()都可以
         pool_shape = pool2.get_shape().as_list()
         nodes = pool_shape[1] * pool_shape[2] * pool_shape[3]
         cnn_out = tf.reshape(pool2, [-1, nodes])
