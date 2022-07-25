@@ -1,11 +1,9 @@
 import tensorflow as tf
-#import tensorflow.compat.v1 as tf
 from tensorflow.python.util import deprecation
 deprecation._PRINT_DEPRECATION_WARNINGS = False
-#tf.disable_v2_behavior()
 # In[] 建立网络,取全连接层的隐含层输出作为特征
 def cnn_1d(input_tensor):
-    input_tensor=tf.reshape(input_tensor,[-1,1,1024,1])  # 将tensor变换为参数shape的形式  tf.reshape(tensor, shape, name=None)
+    input_tensor=tf.reshape(input_tensor,[-1,1,1024,1]) 
     # 第一层卷积层
     with tf.variable_scope('layer01-conv1'):
         conv1_weights = tf.get_variable(
@@ -13,10 +11,7 @@ def cnn_1d(input_tensor):
             initializer=tf.truncated_normal_initializer(stddev=0.1))  
         conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))  
         conv1 = tf.nn.conv2d(input_tensor, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
-        #  conv2d(input, filter, strides, padding, use_cudnn_on_gpu=True, data_format="NHWC", dilations=[1, 1, 1, 1], name=None)
-        # tf.nn.conv2d实现卷积前向传播
-        #  padding:填充方式，VALID不添加，SAME为全0填充
-        relu1 = tf.nn.relu(tf.nn.bias_add(conv1, conv1_biases))  #将输入小于0的值赋值为0，输入大于0的值不变
+        relu1 = tf.nn.relu(tf.nn.bias_add(conv1, conv1_biases)) 
     # 第一层最大池化层
     with tf.name_scope("layer02-pool1"):
         pool1 = tf.nn.max_pool(relu1, ksize = [1,1,2,1],strides=[1,1,2,1],padding="SAME")
@@ -31,14 +26,12 @@ def cnn_1d(input_tensor):
     # 第2层最大池化层    
     with tf.name_scope("layer04-pool2"):
         pool2 = tf.nn.max_pool(relu2, ksize=[1, 1, 2, 1], strides=[1, 1, 2, 1], padding='SAME')
-        # 全连接神经网络的输入是向量，而第二层池化层的输出是矩阵，将矩阵中的节点拉直转化为向量。其中通过get_shape函数可以得到矩阵的维度，返回的是元组
         pool_shape = pool2.get_shape().as_list()
         nodes = pool_shape[1] * pool_shape[2] * pool_shape[3]
         cnn_out = tf.reshape(pool2, [-1, nodes])
     return pool1,pool2,cnn_out
 
 def cnn_2d(input_tensor):
-    # 原始震动数据每个样本维度为1024 正好可以转换为32*32的矩阵作为2d-cnn的输入
     input_tensor=tf.reshape(input_tensor,[-1,32,32,1])
     # 第一层卷积层
     with tf.variable_scope('layer11-conv1'):
@@ -69,8 +62,6 @@ def cnn_2d(input_tensor):
     return pool1,pool2,cnn_out  
 
 def feature_extract_and_output(cnn_out,dropout_placeholdr):
-    # 最后是两层全连接层,特征提取就是提取的第一个全连接层的输出
-    # 第二个全连接层是输出层 也就是分类层
     with tf.variable_scope('layer5-fc1'):
         weights1 = tf.get_variable('weights', [cnn_out.shape[1], 128],initializer=tf.truncated_normal_initializer(stddev=0.1))
         biases1 = tf.get_variable('bias', [128], initializer=tf.constant_initializer(0.1))
