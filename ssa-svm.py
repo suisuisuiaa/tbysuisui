@@ -67,7 +67,7 @@ print('c,g最优解：',GbestPositon)
 #利用最终优化的结果计算分类正确率等信息
 #训练svm分类器
 clf=svm.SVC(C=GbestPositon[0,0],kernel='rbf',gamma=GbestPositon[0,1]) # ovr:一对多策略
-clf.fit(train_X,train_Y) #ravel函数在降维时默认是行序优先
+clf.fit(train_X,train_Y)
 #4.计算svc分类器的准确率
 tra_label=clf.predict(train_X) #训练集的预测标签
 tes_label=clf.predict(test_X) #测试集的预测标签
