@@ -2,17 +2,17 @@
 from scipy.io import loadmat,savemat
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt # python绘图库
+import matplotlib.pyplot as plt 
 from model import CNN_1D,CNN_2D,CNN_fusion
-from sklearn.preprocessing import StandardScaler # 使用sklearn进行数据预处理
+from sklearn.preprocessing import StandardScaler 
 import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"]='1' # 这是默认的显示等级，显示所有信息0
+os.environ["TF_CPP_MIN_LOG_LEVEL"]='1' 
 
 import tensorflow as tf
 tf.set_random_seed(0)
 
 # In[] 加载数据
-data=loadmat('result/data_process.mat')#这个是保存下来的原始数据
+data=loadmat('result/data_process.mat')
 train_X=data['train_X']
 train_Y=data['train_Y']
 valid_X=data['valid_X']
@@ -60,13 +60,12 @@ validacc=[]
 select=0 #为0则重新训练模型 1则加载模型直接进行softmax分类 3则调用加载的模型进行特征提取 以便于file3的svm分类
 
 with tf.Session() as sess:
-    # 初始化变量
     init = tf.global_variables_initializer()
     sess.run(init)
     if select==0:#@重新训练模型
         print("训练模式")#
 
-        n_samples= train_X.shape[0] # 输出行数
+        n_samples= train_X.shape[0] 
         batches=int(np.ceil(n_samples/batch_size))
         # 训练
         for epoch in range(num_epochs):
@@ -100,7 +99,7 @@ with tf.Session() as sess:
         plt.plot( valid, c='g',label='valid')
         plt.ylabel('cross entropy')
         plt.xlabel('Epoch')
-        plt.legend() # 给图像加图例
+        plt.legend() 
         plt.title('loss curve')
         plt.savefig('cnn_image/'+mode+'loss curve.jpg')
             
