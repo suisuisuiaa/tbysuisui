@@ -3,9 +3,8 @@ from scipy.io import loadmat
 import numpy as np
 import matplotlib.pyplot as plt
 from model import CNN_1D, CNN_2D,CNN_fusion
-from sklearn.preprocessing import StandardScaler, MinMaxScaler  # 转换数据集数据/属性缩放到制定区间
+from sklearn.preprocessing import StandardScaler, MinMaxScaler  
 from sklearn.manifold import TSNE  # t-SNE is a tool to visualize high-dimensional data
-from sklearn.decomposition import PCA  # 利用数据的奇异值分解进行线性降维，将数据投影到低维空间
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -13,12 +12,12 @@ import tensorflow as tf
 #import tensorflow.compat.v1 as tf
 #tf.disable_v2_behavior()
 
-tf.set_random_seed(0)  # 设置随机函数的seed参数，对应的变量可以跨session生成相同的随机数：
+tf.set_random_seed(0) 
 
 
 # In[] 加载数据
 
-data=loadmat('result/data_process.mat')#这个是保存下来的原始数据
+data=loadmat('result/data_process.mat')
 train_X=data['train_X']
 train_Y=data['train_Y'].argmax(axis=1) # returns the indices of the maximum values along an axis
 valid_X=data['valid_X']
