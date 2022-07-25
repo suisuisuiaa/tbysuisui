@@ -11,13 +11,13 @@ for item in filenames:
         if 'DE' in key:           #第10和11行的作用是只提取DE端数据
             X = file[key]
             for i in range(50):
-                length = 4096 #4096 = 64*64 转变成64*64的图像
+                length = 1024 #1024 = 32*32 转变成32*32的图像
                 all_lenght = len(X)  #DE端数据总长度
                 random_start = np.random.randint(low=0, high=(all_lenght - 2*length))
-                sample = X[random_start:random_start + length]   #第16和17行是随机选择连续的4096个点
+                sample = X[random_start:random_start + length]   #第16和17行是随机选择连续的1024个点
                 sample = (sample - np.min(sample)) / (np.max(sample) - np.min(sample))  #归一化
                 sample = np.round(sample*255.0)  #转换为灰度像素值
-                sample = sample.reshape(64,64)
+                sample = sample.reshape(32,32)
                 im = Image.fromarray(sample)
                 im.convert('L').save('E:\\CWRU\\灰度图\\'+str(key)+str(i)+'.jpg',format = 'jpeg')
                 #第20行到23行是转换为64*64图像并保存的过程
