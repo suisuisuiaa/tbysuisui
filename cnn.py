@@ -25,7 +25,7 @@ train_X=ss.transform(train_X)
 valid_X=ss.transform(valid_X)
 test_X=ss.transform(test_X)
 
-x = tf.placeholder(tf.float32, [None, 1024]) # 列是1024 行不确定
+x = tf.placeholder(tf.float32, [None, 1024])
 y = tf.placeholder(tf.float32, [None,10])
 dropout_placeholdr = tf.placeholder(tf.float32)#训练的时候用dropout(0-1之间的数) 测试的时候不用dropout(为1)
 # In[2] 定义网络相关参数
