@@ -9,9 +9,6 @@ import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"]='1' # 这是默认的显示等级，显示所有信息0
 
 import tensorflow as tf
-#import tensorflow.compat.v1 as tf
-#tf0.0disable_v2_behavior()
-
 tf.set_random_seed(0)
 
 # In[] 加载数据
@@ -48,8 +45,8 @@ cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y,logits=pred)
 # 平均损失
 cost = tf.reduce_mean(cross_entropy)
 # 分类准确率计算函数
-correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1)) # tf.argmax()返回给定Tensor某一坐标轴上最高得分的索引值，用tf.equal()函数检查预测类标与真实类标是否相同。
-accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32)) # tf.cast()函数的作用是执行 tensorflow 中张量数据类型转换
+correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1)) # tf.argmax()
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32)) # tf.cast()
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon = 1e-10).minimize(cost) # 创建Adam优化器,最小化cost
 
 saver = tf.train.Saver() # 将我们训练好的模型的参数保存下来，以便下一次继续用于训练或测试
@@ -74,7 +71,7 @@ with tf.Session() as sess:
         # 训练
         for epoch in range(num_epochs):
             rand_index=np.arange(n_samples)
-            np.random.shuffle(rand_index)  # 让训练数据集中的数据打乱顺序，然后一个挨着一个生成训练数据对
+            np.random.shuffle(rand_index) 
             # 将训练数据分为batches批，每次放入batch_size个样本，直到放进所有样本
             for i in range(batches):
                 index = rand_index[i*batch_size:(i+1)*batch_size]
