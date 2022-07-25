@@ -9,9 +9,6 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 import tensorflow as tf
-#import tensorflow.compat.v1 as tf
-#tf.disable_v2_behavior()
-
 tf.set_random_seed(0) 
 
 
@@ -31,7 +28,6 @@ valid_X=ss.transform(valid_X)
 test_X=ss.transform(test_X)
 
 # 选择对哪个数据集可视化
-
 input_data=test_X
 label=test_Y
 
@@ -40,7 +36,7 @@ method=TSNE(n_components=3)
 feature0=method.fit_transform(input_data) 
 colors = ['black', 'blue', 'purple', 'yellow', 'cadetblue', 'red', 'lime', 'cyan', 'orange', 'gray']
 plt.figure()
-ax = plt.axes(projection='3d')  # 设置三维轴
+ax = plt.axes(projection='3d') 
 for i in range(len(colors)):
     ax.scatter3D(feature0[:, 0][label==i], feature0[:, 1][label==i],feature0[:, 2][label==i], c=colors[i],label=str(i))
     #ax.text(np.mean(feature0[:, 0][label==i]), np.mean(feature0[:, 1][label==i]),np.mean(feature0[:, 2][label==i]), str(i))
@@ -52,8 +48,8 @@ plt.savefig('cnn_image/'+'original data可视化.jpg')
 
 x = tf.placeholder(tf.float32, [None, 1024])
 y = tf.placeholder(tf.float32, [None,10])
-dropout_placeholdr = tf.placeholder(tf.float32)#训练的时候用dropout(0-1之间的数) 测试的时候不用dropot(为1)
-
+dropout_placeholdr = tf.placeholder(tf.float32)
+#训练的时候用dropout(0-1之间的数) 测试的时候不用dropot(为1)
 
 mode='fusion' # 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
 if mode=='1d':
@@ -63,7 +59,7 @@ elif mode=='2d':
 elif mode=='fusion':
     cnn1d_pool1,cnn1d_pool2,cnn2d_pool1,cnn2d_pool2,cnn_fusion,feature,_= CNN_fusion(x,dropout_placeholdr)
 
-saver = tf.train.Saver()  # 保存模型
+saver = tf.train.Saver() 
 
 # In[3] 提取特征与测试
 
@@ -88,7 +84,7 @@ with tf.Session() as sess:
     feature1=method.fit_transform(output_data) 
 
     plt.figure()
-    ax = plt.axes(projection='3d')  # 设置三维轴
+    ax = plt.axes(projection='3d') 
     for i in range(len(colors)):
         ax.scatter3D(feature1[:, 0][label==i], feature1[:, 1][label==i],feature1[:, 2][label==i], c=colors[i],label=str(i))
         
