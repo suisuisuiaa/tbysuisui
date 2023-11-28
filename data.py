@@ -69,10 +69,7 @@ def train_valid_test_slice(data, labels,rate):
     
     test_X=data[index[m2:],:]
     test_Y=labels[index[m2:],:]    
-    # scaler = MinMaxScaler(feature_range=(0, 1))  # minmax归一化
-    # train_X = scaler.fit_transform(train_X)
-    # valid_X = scaler.fit_transform(valid_X)
-    # test_X = scaler.fit_transform(test_X)
+
     return train_X,train_Y,valid_X, valid_Y, test_X, test_Y
 if __name__ == "__main__":
     d_path='0HP/'
