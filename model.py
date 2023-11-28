@@ -5,7 +5,7 @@ def cnn_1d(input_tensor):
     input_tensor=tf.reshape(input_tensor,[-1,1,1024,1]) 
     with tf.variable_scope('layer01-conv1'):
         conv1_weights = tf.get_variable(
-            "weight", [1, 12, 1, 8], 
+            "weight", [1, 3, 1, 8], 
             initializer=tf.truncated_normal_initializer(stddev=0.1))  
         conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))  
         conv1 = tf.nn.conv2d(input_tensor, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
