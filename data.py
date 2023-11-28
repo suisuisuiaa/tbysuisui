@@ -73,14 +73,9 @@ def train_valid_test_slice(data, labels,rate):
     return train_X,train_Y,valid_X, valid_Y, test_X, test_Y
 if __name__ == "__main__":
     d_path='0HP/'
-    # 从所有.mat文件中读取出数据的字典
     data = capture(original_path=d_path)
-    # 将数据切分为需要的样本
     data, labels = slice_enc(data,number=1000,length=1024)
-    # 类别转为onehot编码
     labels = one_hot(labels)
-    
-    # 将数据划分训练，验证集，测试集
     train_X,train_Y,valid_X, valid_Y, test_X, test_Y = train_valid_test_slice(data, labels,rate=[0.7, 0.2, 0.1])
     
     savemat("result/data_process.mat", {'train_X': train_X,'train_Y': train_Y,
