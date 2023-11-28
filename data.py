@@ -44,7 +44,6 @@ def slice_enc(data,number=1000,length=1024):
     samples,lables=np.array(samples),np.array(labels)
     return samples,lables
 
-# one-hot编码
 def one_hot(labels):
     labels = np.array(labels).reshape([-1, 1])
     Encoder = preprocessing.OneHotEncoder()
@@ -57,8 +56,8 @@ def one_hot(labels):
 def train_valid_test_slice(data, labels,rate):
     
     nsamples=data.shape[0]
-    index=np.arange(nsamples) # 数组范围创建数组
-    np.random.shuffle(index) # 打乱数组顺序
+    index=np.arange(nsamples)
+    np.random.shuffle(index) 
     m1=int(nsamples*rate[0])
     m2=int(nsamples*(rate[0]+rate[1]))
     train_X=data[index[:m1],:]
