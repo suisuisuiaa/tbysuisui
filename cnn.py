@@ -11,7 +11,6 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"]='1'
 import tensorflow as tf
 tf.set_random_seed(0)
 
-# In[] 加载数据
 data=loadmat('result/data_process.mat')
 train_X=data['train_X']
 train_Y=data['train_Y']
@@ -41,25 +40,19 @@ elif mode=='2d':
     _,_,feature,pred= CNN_2D(x,dropout_placeholdr)
 elif mode=='fusion':
     _,_,_,_,_,feature,pred= CNN_fusion(x,dropout_placeholdr)
-# 定义损失函数，交叉熵
 cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y,logits=pred)
-# 平均损失
 cost = tf.reduce_mean(cross_entropy)
-# 分类准确率计算函数
 correct_prediction = tf.equal(tf.argmax(pred,1), tf.argmax(y,1)) # tf.argmax()
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32)) # tf.cast()
-# 创建Adam优化器,最小化cost
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon = 1e-10).minimize(cost) 
 
 saver = tf.train.Saver()
-# In[3] 训练与测试
 train = []
 test = []
 valid = []
 trainacc=[]
 testacc = []
 validacc=[]
-#为0则重新训练模型 1则加载模型直接进行softmax分类 3则调用加载的模型进行特征提取 以便于file3的svm分类
 select=0 
 
 with tf.Session() as sess:
@@ -70,7 +63,6 @@ with tf.Session() as sess:
 
         n_samples= train_X.shape[0] 
         batches=int(np.ceil(n_samples/batch_size))
-        # 训练
         for epoch in range(num_epochs):
             rand_index=np.arange(n_samples)
             np.random.shuffle(rand_index) 
@@ -119,7 +111,7 @@ with tf.Session() as sess:
     
     elif select==1:#调用训练好的模型进行分类
         print("测试模式")#
-        saver.restore(sess, 'save_model_cnn/'+mode) # restore()提取训练好的参数
+        saver.restore(sess, 'save_model_cnn/'+mode) 
         train_acc = sess.run(accuracy, feed_dict={x: train_X, y: train_Y,dropout_placeholdr:1.0})
         valid_acc = sess.run(accuracy, feed_dict={x: valid_X, y: valid_Y,dropout_placeholdr:1.0})
         test_acc = sess.run(accuracy, feed_dict={x: test_X, y: test_Y,dropout_placeholdr:1.0})
@@ -128,7 +120,7 @@ with tf.Session() as sess:
         print('测试集分类精度为：',test_acc*100,'%')
 
     else:#调用训练好的模型进行特征提取
-        print("特征提取模式")# 用于提取训练集 验证集测试集的特征并保存
+        print("特征提取模式")
         saver.restore(sess, 'save_model_cnn/'+mode)
         train_feature = sess.run(feature, feed_dict={x: train_X,dropout_placeholdr:1.0})
         valid_feature = sess.run(feature, feed_dict={x: valid_X,dropout_placeholdr:1.0})
