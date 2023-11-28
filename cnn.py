@@ -27,7 +27,6 @@ test_X=ss.transform(test_X)
 
 x = tf.placeholder(tf.float32, [None, 1024])
 y = tf.placeholder(tf.float32, [None,10])
-#训练的时候用dropout(0-1之间的数) 测试的时候不用dropout(为1)
 dropout_placeholdr = tf.placeholder(tf.float32)
 # In[2] 定义网络相关参数
 # 定义参数
@@ -75,7 +74,6 @@ with tf.Session() as sess:
         for epoch in range(num_epochs):
             rand_index=np.arange(n_samples)
             np.random.shuffle(rand_index) 
-            # 将训练数据分为batches批，每次放入batch_size个样本，直到放进所有样本
             for i in range(batches):
                 index = rand_index[i*batch_size:(i+1)*batch_size]
                 batch_x = train_X[index,:]
@@ -83,7 +81,7 @@ with tf.Session() as sess:
                 sess.run(optimizer,feed_dict={x: batch_x, y: batch_y,dropout_placeholdr:0.5})
     
             
-            [train_loss,train_acc] = sess.run([cost,accuracy], feed_dict={x: train_X, y: train_Y,dropout_placeholdr:1.0}) # feed_dict的作用是给使用placeholder创建出来的tensor赋值
+            [train_loss,train_acc] = sess.run([cost,accuracy], feed_dict={x: train_X, y: train_Y,dropout_placeholdr:1.0}) 
             [test_loss,test_acc] = sess.run([cost, accuracy],feed_dict={x: test_X, y: test_Y, dropout_placeholdr: 1.0})
             [valid_loss,valid_acc] = sess.run([cost,accuracy], feed_dict={x: valid_X, y: valid_Y,dropout_placeholdr:1.0})
 
