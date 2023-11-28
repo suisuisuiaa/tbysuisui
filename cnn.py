@@ -53,7 +53,7 @@ valid = []
 trainacc=[]
 testacc = []
 validacc=[]
-select=0 
+select=0 #为0则重新训练模型 1则加载模型直接进行softmax分类
 
 with tf.Session() as sess:
     init = tf.global_variables_initializer()
