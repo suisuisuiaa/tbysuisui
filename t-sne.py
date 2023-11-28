@@ -27,7 +27,7 @@ train_X=ss.transform(train_X)  #  fit + transform = fit_transform
 valid_X=ss.transform(valid_X)
 test_X=ss.transform(test_X)
 
-# 选择对哪个数据集可视化
+
 input_data=test_X
 label=test_Y
 
@@ -44,12 +44,10 @@ plt.legend(loc=2,fontsize="medium")
 plt.title('original data')
 plt.savefig('cnn_image/'+'original data可视化.jpg')
 
-# In[2] 定义网络相关参数
 
 x = tf.placeholder(tf.float32, [None, 1024])
 y = tf.placeholder(tf.float32, [None,10])
 dropout_placeholdr = tf.placeholder(tf.float32)
-#训练的时候用dropout(0-1之间的数) 测试的时候不用dropot(为1)
 
 mode='fusion' # 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
 if mode=='1d':
@@ -61,11 +59,9 @@ elif mode=='fusion':
 
 saver = tf.train.Saver() 
 
-# In[3] 提取特征与测试
 
 with tf.Session() as sess:
     saver.restore(sess, 'save_model_cnn/'+mode)
-    # 对特征可视化 name就是对应的哪一个
     name='cnn_fusion'
     if name=='cnn1d_pool1':
         features = sess.run(cnn1d_pool1, feed_dict={x: input_data,dropout_placeholdr:1.0})
