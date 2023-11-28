@@ -1,10 +1,8 @@
 import tensorflow as tf
 from tensorflow.python.util import deprecation
 deprecation._PRINT_DEPRECATION_WARNINGS = False
-# In[] 建立网络,取全连接层的隐含层输出作为特征
 def cnn_1d(input_tensor):
     input_tensor=tf.reshape(input_tensor,[-1,1,1024,1]) 
-    # 第一层卷积层
     with tf.variable_scope('layer01-conv1'):
         conv1_weights = tf.get_variable(
             "weight", [1, 12, 1, 8], 
@@ -12,18 +10,15 @@ def cnn_1d(input_tensor):
         conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))  
         conv1 = tf.nn.conv2d(input_tensor, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
         relu1 = tf.nn.relu(tf.nn.bias_add(conv1, conv1_biases)) 
-    # 第一层最大池化层
     with tf.name_scope("layer02-pool1"):
         pool1 = tf.nn.max_pool(relu1, ksize = [1,1,2,1],strides=[1,1,2,1],padding="SAME")
-    # 第2层卷积层
     with tf.variable_scope("layer03-conv2"):
         conv2_weights = tf.get_variable(
             "weight", [1, 3, 8, 16],
             initializer=tf.truncated_normal_initializer(stddev=0.1))
         conv2_biases = tf.get_variable("bias", [16], initializer=tf.constant_initializer(0.1))
         conv2 = tf.nn.conv2d(pool1, conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
-        relu2 = tf.nn.relu(tf.nn.bias_add(conv2, conv2_biases))
-    # 第2层最大池化层    
+        relu2 = tf.nn.relu(tf.nn.bias_add(conv2, conv2_biases))  
     with tf.name_scope("layer04-pool2"):
         pool2 = tf.nn.max_pool(relu2, ksize=[1, 1, 2, 1], strides=[1, 1, 2, 1], padding='SAME')
         pool_shape = pool2.get_shape().as_list()
@@ -33,7 +28,6 @@ def cnn_1d(input_tensor):
 
 def cnn_2d(input_tensor):
     input_tensor=tf.reshape(input_tensor,[-1,32,32,1])
-    # 第一层卷积层
     with tf.variable_scope('layer11-conv1'):
         conv1_weights = tf.get_variable(
             "weight", [3, 3, 1, 8],
@@ -41,10 +35,8 @@ def cnn_2d(input_tensor):
         conv1_biases = tf.get_variable("bias", [8], initializer=tf.constant_initializer(0.1))
         conv1 = tf.nn.conv2d(input_tensor, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
         relu1 = tf.nn.relu(tf.nn.bias_add(conv1, conv1_biases))
-    # 第一层最大池化层
     with tf.name_scope("layer12-pool1"):
         pool1 = tf.nn.max_pool(relu1, ksize = [1,2,2,1],strides=[1,2,2,1],padding="SAME")
-    # 第2层卷积层
     with tf.variable_scope("layer13-conv2"):
         conv2_weights = tf.get_variable(
             "weight", [3, 3, 8, 16],
@@ -52,7 +44,6 @@ def cnn_2d(input_tensor):
         conv2_biases = tf.get_variable("bias", [16], initializer=tf.constant_initializer(0.1))
         conv2 = tf.nn.conv2d(pool1, conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
         relu2 = tf.nn.relu(tf.nn.bias_add(conv2, conv2_biases))
-    # 第2层最大池化层    
     with tf.name_scope("layer14-pool2"):
         pool2 = tf.nn.max_pool(relu2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
         
