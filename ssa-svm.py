@@ -24,18 +24,16 @@ def plot_confusion_matrix(cm, labels_name, title):
     plt.show()
 
 def fun(X):
-    # 训练svm分类器
-    clf = svm.SVC(C=X[0], kernel='rbf', gamma=X[1])  # ovr:一对多策略
+    clf = svm.SVC(C=X[0], kernel='rbf', gamma=X[1]) 
     clf.fit(train_X, train_Y) 
-    # 计算svc分类器的准确率
     tes_label = clf.predict(test_X) 
     train_labelout = clf.predict(train_X)  
     val_label = clf.predict(valid_X)  
-    output = 3 - accuracy_score(test_Y, tes_label) - accuracy_score(train_Y,train_labelout) - accuracy_score(valid_Y,val_label)  # 计算错误率，如果错误率越小，结果越优
+    output = 3 - accuracy_score(test_Y, tes_label) - accuracy_score(train_Y,train_labelout) - accuracy_score(valid_Y,val_label)  
     return output
 
 # 加载数据
-mode='2d' # 选择 1d 2d 还是 fusion 对应尽1dcnn 2dcnn 与融合cnn
+mode='2d' 
 dataFile = 'result/'+mode+'data_feature.mat'
 data = loadmat(dataFile)
 train_X=data['train_X']
@@ -62,7 +60,7 @@ GbestScore,GbestPositon,Curve = SSA.SSA(pop,dim,lb,ub,MaxIter,fobj)
 print('最优适应度值：',GbestScore)
 print('c,g最优解：',GbestPositon)
 
-clf=svm.SVC(C=GbestPositon[0,0],kernel='rbf',gamma=GbestPositon[0,1]) # ovr:一对多策略
+clf=svm.SVC(C=GbestPositon[0,0],kernel='rbf',gamma=GbestPositon[0,1])
 clf.fit(train_X,train_Y)
 tra_label=clf.predict(train_X) 
 tes_label=clf.predict(test_X) 
